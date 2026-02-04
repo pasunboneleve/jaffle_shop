@@ -17,6 +17,8 @@ final as (
     sum(payments.amount) as amount
     from orders
     left join payments using (order_id)
+    where orders.status = 'completed'
+    and payments.status = 'success'
     group by 1, 2
 )
 
