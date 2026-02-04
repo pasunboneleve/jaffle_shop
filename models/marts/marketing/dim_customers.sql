@@ -6,30 +6,20 @@ with customers as (
 
 orders as (
 
-    select * from {{ ref('stg_jaffle_shop__orders') }}
-    where status = 'completed'
+    select * from {{ ref('fct_orders') }}
 
 ), 
-
-payments as (
-
-    select * from {{ ref('stg_stripe__payments') }}
-    where status = 'success'
-
-),
 
 customer_orders as (
 
     select
         customer_id,
-
         min(order_date) as first_order_date,
         max(order_date) as most_recent_order_date,
         count(order_id) as number_of_orders,
         sum(amount) as lifetime_value
 
     from orders
-    left join payments using (order_id)
 
     group by 1
 
