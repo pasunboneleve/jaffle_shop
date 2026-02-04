@@ -1,10 +1,4 @@
-with customers as (
-
-    select * from {{ ref('stg_jaffle_shop__customers') }}
-
-),
-
-orders as (
+with orders as (
 
     select * from {{ ref('stg_jaffle_shop__orders') }} 
 
@@ -22,7 +16,7 @@ final as (
     orders.customer_id,
     sum(payments.amount) as amount
     from orders
-    left join payments on payments.order_id = orders.order_id
+    left join payments using (order_id)
     group by 1, 2
 )
 
